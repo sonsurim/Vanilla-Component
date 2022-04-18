@@ -4,7 +4,8 @@
   "description": "바닐라 타입스크립트로 컴포넌트 패턴의 상태 기반 렌더링 방식 구현하기 😊",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --mode production",
+		"dev": "webpack-dev-server --mode development"
   },
   "repository": {
     "type": "git",
