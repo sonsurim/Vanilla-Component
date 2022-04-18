@@ -1,0 +1,9 @@
+# dependencies
+/node_modules
+
+# production
+/dist
+
+# etc
+.DS_Store
+.vscode
