@@ -8,6 +8,7 @@ interface IComponentParams<StateType> {
 /** App Component */
 interface IAppState {
   text: string
+  onClick(): void
 }
 
 export type { IComponentParams, IAppState }
