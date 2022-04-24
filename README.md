@@ -4,3 +4,4 @@
 ## 관련 포스팅 📚
 - [바닐라로 상태 기반 렌더링 컴포넌트 만들기 1 - 왜 상태 기반 렌더링을 하게 됐을까?](https://velog.io/@surim014/vanilla1)
 - [바닐라로 상태 기반 렌더링 컴포넌트 만들기 2 - 상태 기반 렌더링은 어떻게 하는걸까?](https://velog.io/@surim014/vanilla2)
+- [바닐라로 상태 기반 렌더링 컴포넌트 만들기 3 - 환경 설정하기 (feat. 보일러 플레이트)](https://velog.io/@surim014/vanilla3)
