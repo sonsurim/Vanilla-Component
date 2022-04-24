@@ -8,7 +8,6 @@ export default class Component<StateType> {
   needRender: boolean
   needUpdate: boolean
   subscribers: Set<any>
-  styleTagName: string
 
   constructor({
     node,
@@ -21,7 +20,6 @@ export default class Component<StateType> {
     this.needRender = false
     this.needUpdate = false
     this.subscribers = new Set([])
-    this.styleTagName = ''
 
     this.init()
     this.render()
