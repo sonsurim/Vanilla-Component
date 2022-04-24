@@ -1,4 +1,5 @@
 interface IExampleTextState {
+  initalText: string
   text: string
 }
 

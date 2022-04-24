@@ -7,8 +7,11 @@ interface IComponentParams<StateType> {
 
 /** App Component */
 interface IAppState {
+  initalText: string
   text: string
-  onClick(): void
+  onClick(type: string): void
+  handleChangeText(): void
+  handleChangeInitalText(): void
 }
 
 export type { IComponentParams, IAppState }
