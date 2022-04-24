@@ -14,7 +14,7 @@ export default class App extends Component<IAppState> {
       },
       handleChangeInitalText: (): void => {
         this.setState({
-          initalText: `Changed State: ${Math.random()}`
+          initalText: `다른 컴포넌트의 렌더링 영향으로 렌더링이 되었습니다! ${Math.random()}`
         })
       },
       onClick: (type: string): void => {
@@ -32,12 +32,12 @@ export default class App extends Component<IAppState> {
 
   template(): string {
     return `
-    <main id="App">
-      <ExampleText></ExampleText>
-      <HandleTextButton>Change Text!</HandleTextButton>
-      <HandleInitalTextButton>Change InitalText</HandleInitalTextButton>
-    </main>
-  `
+      <main id="App">
+        <ExampleText></ExampleText>
+        <HandleTextButton>Change Text!</HandleTextButton>
+        <HandleInitalTextButton>Change InitalText</HandleInitalTextButton>
+      </main>
+    `
   }
 
   attachChildComponent(): void {
