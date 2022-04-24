@@ -5,4 +5,9 @@ interface IComponentParams<StateType> {
   preventRenderStateKey?: string[]
 }
 
-export type { IComponentParams }
+/** App Component */
+interface IAppState {
+  text: string
+}
+
+export type { IComponentParams, IAppState }
