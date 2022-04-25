@@ -19,6 +19,11 @@ npm run dev
 
 <br>
 
+## Core Component 활용 예시 화면🎬
+<img src="./.github/images/example.gif">
+
+<br>
+
 ## Component Life Cycle ♻️
 <img src="./.github/images/lifecycle.jpeg">
 
