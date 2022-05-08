@@ -11,15 +11,32 @@ export default class App extends Component<IAppState> {
         this.setState({
           text: `Changed State: ${Math.random()}`
         })
+
+        console.log(this.state)
       },
       handleChangeInitalText: (): void => {
         this.setState({
           initalText: `다른 컴포넌트의 렌더링 영향으로 렌더링이 되었습니다! ${Math.random()}`
         })
       },
+      handleChangeState: (): void => {
+        console.log(this.state)
+
+        this.state = {
+          ...this.state,
+          initalText: 'Change Text!'
+        }
+
+        console.log(this.state)
+      },
       onClick: (type: string): void => {
         if (type === 'initalText') {
           this.state.handleChangeInitalText()
+          return
+        }
+
+        if (type === 'changeState') {
+          this.state.handleChangeState()
           return
         }
 
@@ -36,6 +53,7 @@ export default class App extends Component<IAppState> {
         <ExampleText></ExampleText>
         <HandleTextButton>Change Text!</HandleTextButton>
         <HandleInitalTextButton>Change InitalText</HandleInitalTextButton>
+        <HandleChangeStateButton>Change State!</HandleChangeStateButton>
       </main>
     `
   }
@@ -66,6 +84,15 @@ export default class App extends Component<IAppState> {
       initalState: {
         onClick: (): void => {
           onClick('initalText')
+        }
+      }
+    })
+
+    new Button({
+      node: selectEl(this.node, 'HandleChangeStateButton'),
+      initalState: {
+        onClick: (): void => {
+          onClick('changeState')
         }
       }
     })

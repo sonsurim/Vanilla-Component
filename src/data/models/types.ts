@@ -12,6 +12,7 @@ interface IAppState {
   onClick(type: string): void
   handleChangeText(): void
   handleChangeInitalText(): void
+  handleChangeState(): void
 }
 
 export type { IComponentParams, IAppState }
