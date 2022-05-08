@@ -11,8 +11,6 @@ export default class App extends Component<IAppState> {
         this.setState({
           text: `Changed State: ${Math.random()}`
         })
-
-        console.log(this.state)
       },
       handleChangeInitalText: (): void => {
         this.setState({
@@ -20,14 +18,10 @@ export default class App extends Component<IAppState> {
         })
       },
       handleChangeState: (): void => {
-        console.log(this.state)
-
         this.state = {
           ...this.state,
           initalText: 'Change Text!'
         }
-
-        console.log(this.state)
       },
       onClick: (type: string): void => {
         if (type === 'initalText') {

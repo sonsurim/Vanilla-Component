@@ -1,9 +1,9 @@
 import type { IComponentParams } from '@models'
 import { convertTemplateAsComponent } from '@utils'
 
-export default class Component<StateType> {
+export default abstract class Component<StateType> {
   node: Element
-  state: StateType
+  #originState: StateType
   preventRenderStateKey: Set<string>
   needRender: boolean
   needUpdate: boolean
@@ -15,7 +15,7 @@ export default class Component<StateType> {
     preventRenderStateKey = []
   }: IComponentParams<StateType>) {
     this.node = node
-    this.state = initalState as StateType
+    this.#originState = initalState as StateType
     this.preventRenderStateKey = new Set(preventRenderStateKey)
     this.needRender = false
     this.needUpdate = false
@@ -24,6 +24,17 @@ export default class Component<StateType> {
     this.init()
     this.render()
     this.fetch()
+  }
+
+  get state(): StateType {
+    return this.#originState
+  }
+
+  set state(newState) {
+    throw new SyntaxError(
+      `state는 setState를 통해서만 변경이 가능합니다!
+      ${JSON.stringify(newState)}`
+    )
   }
 
   template(): string {
@@ -93,10 +104,10 @@ export default class Component<StateType> {
   }
 
   validationState(newState: Partial<StateType>): string[] {
-    const currentState = { ...this.state } as StateType
-    const validState = Object.keys(newState).filter(
-      _key => _key in currentState
-    )
+    const currentState = { ...this.#originState } as StateType
+    const validState = Object.keys(newState).filter(_key => {
+      return _key in currentState
+    })
 
     this.needUpdate = validState.length > 0
     return validState
@@ -109,7 +120,6 @@ export default class Component<StateType> {
       return
     }
 
-    const currentState = { ...this.state } as StateType
     const preventRenderStateKey = Array.from(this.preventRenderStateKey)
 
     validState?.forEach(key => {
@@ -119,10 +129,11 @@ export default class Component<StateType> {
         this.needRender = true
       }
 
-      currentState[stateKey] = newState[stateKey] as StateType[keyof StateType]
+      this.#originState[stateKey] = newState[
+        stateKey
+      ] as StateType[keyof StateType]
     })
 
-    this.state = currentState
     this.notify(newState)
   }
 }
