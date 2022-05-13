@@ -1,4 +1,4 @@
-import { Component, Button, ExampleText } from '@components'
+import { Button, Component, ExampleText } from '@components'
 import type { IAppState, IComponentParams } from '@models'
 import { selectEl } from '@utils'
 
@@ -14,7 +14,7 @@ export default class App extends Component<IAppState> {
       },
       handleChangeInitalText: (): void => {
         this.setState({
-          initalText: `다른 컴포넌트의 렌더링 영향으로 렌더링이 되었습니다! ${Math.random()}`
+          initalText: `다른 컴포넌트의 렌더링 영향으로 렌더링이 되었습니다!`
         })
       },
       handleChangeState: (): void => {
@@ -52,7 +52,7 @@ export default class App extends Component<IAppState> {
     `
   }
 
-  attachChildComponent(): void {
+  renderChildComponent(): void {
     const { initalText, text, onClick } = this.state
 
     const exampleText = new ExampleText({

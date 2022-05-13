@@ -26,6 +26,7 @@ export default abstract class Component<StateType> {
     this.fetch()
   }
 
+  /** Component Data & Template */
   get state(): StateType {
     return this.#originState
   }
@@ -41,6 +42,7 @@ export default abstract class Component<StateType> {
     return ``
   }
 
+  /** Component Life Cycle */
   init(): void {
     return
   }
@@ -52,18 +54,22 @@ export default abstract class Component<StateType> {
   render(): void {
     convertTemplateAsComponent.call(this)
     this.setEvent()
-    this.attachChildComponent()
+    this.renderChildComponent()
   }
 
+  // 컴포넌트 상태 변경 시, 발생하는 업데이트 라이프 사이클
   update(): void {
-    this.needRender = false
+    if (!this.needRender) {
+      this.renderChildComponent()
+      return
+    }
+
     this.clearEvent()
     this.render()
   }
 
-  updateChildren(): void {
-    this.needRender = false
-    this.attachChildComponent()
+  renderChildComponent(): void {
+    return
   }
 
   setEvent(): void {
@@ -74,66 +80,68 @@ export default abstract class Component<StateType> {
     return
   }
 
-  attachChildComponent(): void {
-    return
-  }
-
+  /** Subscriber Method */
   subscribe(...subscribers: any[]): void {
     subscribers.forEach(subscriber => {
       this.subscribers.add(subscriber)
     })
   }
 
+  // 하위 컴포넌트 상태 변경 및 렌더링
   notify(newState: Partial<StateType>): void {
     const subscribers = Array.from(this.subscribers)
 
-    const validSubscribers = subscribers.filter(
-      subscriber => subscriber.validationState(newState).length
-    )
-
-    validSubscribers?.forEach(subscriber => {
+    subscribers?.forEach(subscriber => {
       subscriber.setState(newState)
-
-      if (subscriber.needRender) {
-        subscriber.update()
-        return
-      }
-
-      subscriber.updateChildren()
+      subscriber.update()
+      subscriber.needRender = false
     })
   }
 
-  validationState(newState: Partial<StateType>): string[] {
-    const currentState = { ...this.#originState } as StateType
-    const validState = Object.keys(newState).filter(_key => {
-      return _key in currentState
-    })
-
-    this.needUpdate = validState.length > 0
-    return validState
-  }
-
+  /** SetState */
+  // 컴포넌트의 상태 변경 로직
   setState(newState: Partial<StateType>): void {
-    const validState = this.validationState(newState)
+    this.checkNeedUpdate(newState)
 
     if (!this.needUpdate) {
       return
     }
 
+    this.reflectNeedRender(newState)
+    this.reflectState(newState)
+    this.notify(newState)
+  }
+
+  // 컴포넌트 상태 유효성 검사
+  checkNeedUpdate(newState: Partial<StateType>): void {
+    const prevState = JSON.stringify({ ...this.#originState })
+    const currentState = JSON.stringify({ ...this.#originState, ...newState })
+
+    this.needUpdate = prevState !== currentState
+  }
+
+  // 컴포넌트 렌더링 필요 여부 반영
+  reflectNeedRender(newState: Partial<StateType>): void {
+    const updatedStateKeys = Object.keys(newState)
     const preventRenderStateKey = Array.from(this.preventRenderStateKey)
 
-    validState?.forEach(key => {
-      const stateKey = key as keyof StateType
+    const preventRenderState = updatedStateKeys.filter(key =>
+      preventRenderStateKey.includes(key)
+    )
 
-      if (!preventRenderStateKey.includes(key)) {
-        this.needRender = true
-      }
+    this.needRender = preventRenderState.length === 0
+  }
+
+  // 컴포넌트 변경된 상태 반영
+  reflectState(newState: Partial<StateType>): void {
+    const updatedStateKeys = Object.keys(newState)
+
+    updatedStateKeys?.forEach(key => {
+      const stateKey = key as keyof StateType
 
       this.#originState[stateKey] = newState[
         stateKey
       ] as StateType[keyof StateType]
     })
-
-    this.notify(newState)
   }
 }
